@@ -2,6 +2,9 @@ import express, { Express } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import pool from "./config/db";
+import userRoutes from './routes/userRoutes';
+import friendRoutes from './routes/friendRoutes';
+
 
 dotenv.config();
 
@@ -17,6 +20,9 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/api/users', userRoutes);
+app.use('/api/friends', friendRoutes);
 
 const port = process.env.PORT || 3000;
 

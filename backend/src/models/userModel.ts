@@ -3,6 +3,7 @@ export interface User {
     username: string;
     name: string;
     location: string;
+    profile:string;
     bio: string;
     blog: string;
     public_repos: number;
@@ -11,6 +12,7 @@ export interface User {
     following: number;
     created_at: Date;
     updated_at: Date;
+    repos?: any[];
     deleted_at?: Date | null;
   }
   
