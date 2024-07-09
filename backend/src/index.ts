@@ -1,7 +1,7 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
-import cors from 'cors';
-import pool from './config/db';
+import cors from "cors";
+import pool from "./config/db";
 
 dotenv.config();
 
@@ -18,16 +18,16 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 const port = process.env.PORT || 3000;
 
-pool.connect()
+pool
+  .connect()
   .then(() => {
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   })
   .catch((err) => {
-    console.error('Failed to connect to the database:', err);
+    console.error("Failed to connect to the database:", err);
     process.exit(1);
   });
