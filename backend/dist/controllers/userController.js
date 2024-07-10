@@ -73,7 +73,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json(user);
     }
     catch (error) {
-        console.log(error);
+        console.log(error.message);
         res.status(500).json({ error: error.message });
     }
 });
