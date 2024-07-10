@@ -49,6 +49,14 @@ export const fetchFollowers = createAsyncThunk(
   }
 );
 
+export const deleteUser = createAsyncThunk<void, string>(
+  'user/deleteUser',
+  async (username: string) => {
+    await axios.delete(`${host}/api/users/${username}`);
+    return username;
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -75,6 +83,9 @@ const userSlice = createSlice({
       .addCase(fetchFollowers.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
+      })
+      .addCase(deleteUser.fulfilled, (state, action: PayloadAction<string>) => {
+        delete state.users[action.payload];
       });
   },
 });

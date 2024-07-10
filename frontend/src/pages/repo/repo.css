@@ -120,7 +120,7 @@
 }
 
 /* Extra user details */
-.user-friends  {
+.user-friends {
     font-size: 30px;
     color: #0366d6;
     cursor: pointer;
@@ -153,3 +153,49 @@ p {
     margin: 0;
     font-size: 14px;
 }
+
+
+.repsotory-name-container{
+    display: flex ;
+    align-items: center;
+    gap: 10px;
+}
+
+.repository-link{
+    display: flex;
+}
+
+.loader  {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #000000;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    z-index: 10;
+    }
+
+    @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 
+
+    .User-not-found{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .User-not-found p{
+        color: black;
+        font-size: xx-large;
+        font-weight: 600;
+        
+    }

@@ -28,7 +28,7 @@ const RepositoryDetails: React.FC = () => {
 
   return (
     <div className="repository-details-container">
-      <ArrowBigLeft className="back-arrow" size={25} onClick={()=>navitate(-1)} />
+      <ArrowBigLeft className="back-arrow" size={35} onClick={()=>navitate(-1)} />
       <div className="repository-header">
         <img
           src={repo.owner.avatar_url}
