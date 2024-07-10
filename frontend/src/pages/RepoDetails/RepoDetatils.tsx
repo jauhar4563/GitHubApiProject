@@ -7,7 +7,7 @@ import "./RepoDetails.css"; // Import the CSS file
 import { ArrowBigLeft, CircleCheck } from "lucide-react";
 
 const RepositoryDetails: React.FC = () => {
-  const navitate = useNavigate();
+  const navigate = useNavigate();
   const { username, repoName } = useParams<{
     username: string;
     repoName: string;
@@ -28,7 +28,11 @@ const RepositoryDetails: React.FC = () => {
 
   return (
     <div className="repository-details-container">
-      <ArrowBigLeft className="back-arrow" size={35} onClick={()=>navitate(-1)} />
+      <ArrowBigLeft
+        className="back-arrow"
+        size={35}
+        onClick={() => navigate(-1)}
+      />
       <div className="repository-header">
         <img
           src={repo.owner.avatar_url}
@@ -48,7 +52,17 @@ const RepositoryDetails: React.FC = () => {
       <div className="repository-content">
         <h2 className="sub-heading">Application</h2>
         <h1 className="repository-name">{repo.name}</h1>
-        <button className="setup-plan-button">Set up a plan</button>
+        <button
+          className="setup-plan-button"
+          onClick={() =>
+            window.open(
+              `https://github.com/${repo.owner.login}/${repo.name}`,
+              "_blank"
+            )
+          }
+        >
+          Check GitHub Repo
+        </button>
         <p className="repository-description">{repo.description}</p>
       </div>
       <div className="repository-data">

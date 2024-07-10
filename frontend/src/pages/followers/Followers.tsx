@@ -48,6 +48,13 @@ const Followers: React.FC = () => {
             </Link>
           </li>
         ))}
+        {!Array.isArray(user.followers) || user.followers.length===0 && (
+          <div>
+            <p className="loading-followers">Loading</p>
+          </div>
+        )
+
+        }
       </ul>
     </div>
   );
