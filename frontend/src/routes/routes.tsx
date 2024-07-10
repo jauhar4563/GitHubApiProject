@@ -1,9 +1,9 @@
 import App from "../App";
 import { createBrowserRouter } from "react-router-dom";
-import Repositories from "../pages/repo/Repo";
 import RepositoryDetails from "../pages/RepoDetails/RepoDetatils";
 import Followers from "../pages/followers/Followers";
 import Home from "../pages/home/Home";
+import Repositories from "../pages/repo/Repo";
 
 const appRouter: ReturnType<typeof createBrowserRouter> = createBrowserRouter([
   {
