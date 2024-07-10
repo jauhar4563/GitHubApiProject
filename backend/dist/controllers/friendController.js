@@ -22,15 +22,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -39,22 +30,22 @@ exports.addFriends = void 0;
 const axios_1 = __importDefault(require("axios"));
 const userRepository = __importStar(require("../repositories/userRepository"));
 const friendshipRepository = __importStar(require("../repositories/friendRepository"));
-const addFriends = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const addFriends = async (req, res) => {
     const { username } = req.params;
     try {
-        const user = yield userRepository.getUserByUsername(username);
+        const user = await userRepository.getUserByUsername(username);
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        const followersResponse = yield axios_1.default.get(`https://api.github.com/users/${username}/followers`);
-        const followingResponse = yield axios_1.default.get(`https://api.github.com/users/${username}/following`);
+        const followersResponse = await axios_1.default.get(`https://api.github.com/users/${username}/followers`);
+        const followingResponse = await axios_1.default.get(`https://api.github.com/users/${username}/following`);
         const followers = followersResponse.data.map((f) => f.login);
         const following = followingResponse.data.map((f) => f.login);
         const mutualFollowers = followers.filter((f) => following.includes(f));
-        const friends = yield userRepository.searchUsers(mutualFollowers, undefined);
-        yield friendshipRepository.deleteFriendshipsByUserId(user.id);
+        const friends = await userRepository.searchUsers(mutualFollowers, undefined);
+        await friendshipRepository.deleteFriendshipsByUserId(user.id);
         for (const friend of friends) {
-            yield friendshipRepository.createFriendship(user.id, friend.id);
+            await friendshipRepository.createFriendship(user.id, friend.id);
         }
         console.log(friends, 'in getFreinds');
         res.json(friends);
@@ -63,5 +54,5 @@ const addFriends = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         console.log(error.message);
         res.status(500).json({ error: error.message });
     }
-});
+};
 exports.addFriends = addFriends;

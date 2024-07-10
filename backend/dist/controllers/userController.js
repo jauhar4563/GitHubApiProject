@@ -22,15 +22,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -38,12 +29,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSortedUsers = exports.updateUser = exports.deleteUser = exports.searchUsers = exports.getFollowersAndFriends = exports.createUser = void 0;
 const axios_1 = __importDefault(require("axios"));
 const userRepository = __importStar(require("../repositories/userRepository"));
-const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createUser = async (req, res) => {
     const { username } = req.body;
     try {
-        let user = yield userRepository.getUserByUsername(username);
+        let user = await userRepository.getUserByUsername(username);
         if (!user) {
-            const response = yield axios_1.default.get(`https://api.github.com/users/${username}`);
+            const response = await axios_1.default.get(`https://api.github.com/users/${username}`);
             const userData = {
                 id: 0,
                 username: response.data.login,
@@ -59,11 +50,11 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 created_at: new Date(response.data.created_at),
                 updated_at: new Date(response.data.updated_at),
             };
-            yield userRepository.createUser(userData);
-            user = yield userRepository.getUserByUsername(username);
+            await userRepository.createUser(userData);
+            user = await userRepository.getUserByUsername(username);
         }
         if (user) {
-            const reposResponse = yield axios_1.default.get(`https://api.github.com/users/${username}/repos`);
+            const reposResponse = await axios_1.default.get(`https://api.github.com/users/${username}/repos`);
             const repos = reposResponse.data;
             user.repos = repos;
         }
@@ -76,28 +67,28 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         console.log(error.message);
         res.status(500).json({ error: error.message });
     }
-});
+};
 exports.createUser = createUser;
-const getFollowersAndFriends = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getFollowersAndFriends = async (req, res) => {
     const { username } = req.params;
     console.log(username);
     try {
-        const user = yield userRepository.getUserByUsername(username);
+        const user = await userRepository.getUserByUsername(username);
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        const followersResponse = yield axios_1.default.get(`https://api.github.com/users/${username}/followers`);
-        const followingResponse = yield axios_1.default.get(`https://api.github.com/users/${username}/following`);
+        const followersResponse = await axios_1.default.get(`https://api.github.com/users/${username}/followers`);
+        const followingResponse = await axios_1.default.get(`https://api.github.com/users/${username}/following`);
         const followers = followersResponse.data.map((f) => f.login);
         const following = followingResponse.data.map((f) => f.login);
         const mutualFollowers = followers.filter((f) => following.includes(f));
-        const friends = yield userRepository.searchUsers(mutualFollowers, undefined);
-        const followerDetails = yield Promise.all(followers.map((followerUsername) => __awaiter(void 0, void 0, void 0, function* () {
-            const follower = yield userRepository.getUserByUsername(followerUsername);
+        const friends = await userRepository.searchUsers(mutualFollowers, undefined);
+        const followerDetails = await Promise.all(followers.map(async (followerUsername) => {
+            const follower = await userRepository.getUserByUsername(followerUsername);
             if (follower) {
                 return follower;
             }
-            const response = yield axios_1.default.get(`https://api.github.com/users/${followerUsername}`);
+            const response = await axios_1.default.get(`https://api.github.com/users/${followerUsername}`);
             const followerData = {
                 id: 0,
                 username: response.data.login,
@@ -113,9 +104,9 @@ const getFollowersAndFriends = (req, res) => __awaiter(void 0, void 0, void 0, f
                 created_at: new Date(response.data.created_at),
                 updated_at: new Date(response.data.updated_at),
             };
-            yield userRepository.createUser(followerData);
+            await userRepository.createUser(followerData);
             return followerData;
-        })));
+        }));
         res.json({
             followers: followerDetails,
             friends,
@@ -125,35 +116,35 @@ const getFollowersAndFriends = (req, res) => __awaiter(void 0, void 0, void 0, f
         console.log(error.message);
         res.status(500).json({ error: error.message });
     }
-});
+};
 exports.getFollowersAndFriends = getFollowersAndFriends;
-const searchUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const searchUsers = async (req, res) => {
     const { username, location } = req.query;
     try {
-        const users = yield userRepository.searchUsers(username, location);
+        const users = await userRepository.searchUsers(username, location);
         res.json(users);
     }
     catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
+};
 exports.searchUsers = searchUsers;
-const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteUser = async (req, res) => {
     const { username } = req.params;
     try {
-        yield userRepository.deleteUser(username);
+        await userRepository.deleteUser(username);
         res.json({ message: "User deleted successfully" });
     }
     catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
+};
 exports.deleteUser = deleteUser;
-const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUser = async (req, res) => {
     const { username } = req.params;
     const { location, blog, bio } = req.body;
     try {
-        const user = yield userRepository.updateUser(username, location, blog, bio);
+        const user = await userRepository.updateUser(username, location, blog, bio);
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -162,16 +153,16 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
+};
 exports.updateUser = updateUser;
-const getSortedUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getSortedUsers = async (req, res) => {
     const { sortBy } = req.query;
     try {
-        const users = yield userRepository.getSortedUsers(sortBy);
+        const users = await userRepository.getSortedUsers(sortBy);
         res.json(users);
     }
     catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
+};
 exports.getSortedUsers = getSortedUsers;
