@@ -10,6 +10,11 @@ dotenv.config();
 
 const app: Express = express();
 
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next(); // Move to the next middleware or route handler
+});
+
 app.use(cors({
   origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",

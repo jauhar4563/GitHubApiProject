@@ -5,6 +5,7 @@ import * as userRepository from "../repositories/userRepository";
 
 export const createUser = async (req: Request, res: Response) => {
   const { username } = req.body;
+  console.log(username);
   try {
     let user: User | null = await userRepository.getUserByUsername(username);
     if (!user) {
@@ -39,6 +40,7 @@ export const createUser = async (req: Request, res: Response) => {
     } else {
       return res.status(404).json({ error: "User not found" });
     }
+    console.log("responded to client")
     res.json(user);
 
   } catch (error: any) {

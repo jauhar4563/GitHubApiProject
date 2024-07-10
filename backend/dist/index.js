@@ -11,6 +11,10 @@ const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const friendRoutes_1 = __importDefault(require("./routes/friendRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next(); // Move to the next middleware or route handler
+});
 app.use((0, cors_1.default)({
     origin: "*",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",

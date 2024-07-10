@@ -31,6 +31,7 @@ const axios_1 = __importDefault(require("axios"));
 const userRepository = __importStar(require("../repositories/userRepository"));
 const createUser = async (req, res) => {
     const { username } = req.body;
+    console.log(username);
     try {
         let user = await userRepository.getUserByUsername(username);
         if (!user) {
@@ -61,6 +62,7 @@ const createUser = async (req, res) => {
         else {
             return res.status(404).json({ error: "User not found" });
         }
+        console.log("responded to client");
         res.json(user);
     }
     catch (error) {
