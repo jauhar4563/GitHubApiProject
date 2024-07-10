@@ -31,9 +31,9 @@ const axios_1 = __importDefault(require("axios"));
 const userRepository = __importStar(require("../repositories/userRepository"));
 const createUser = async (req, res) => {
     const { username } = req.body;
-    console.log(username);
     try {
         let user = await userRepository.getUserByUsername(username);
+        console.log(user);
         if (!user) {
             const response = await axios_1.default.get(`https://api.github.com/users/${username}`);
             const userData = {
