@@ -57,6 +57,7 @@ const createUser = async (req, res) => {
         if (user) {
             const reposResponse = await axios_1.default.get(`https://api.github.com/users/${username}/repos`);
             const repos = reposResponse.data;
+            console.log(repos, 'repos in getRepository');
             user.repos = repos;
         }
         else {

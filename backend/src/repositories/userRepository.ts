@@ -7,7 +7,6 @@ export const getUserByUsername = async (
   const result = await pool.query("SELECT * FROM users WHERE username = $1", [
     username,
   ]);
-  console.log(result)
   return result.rows.length ? result.rows[0] : null;
 };
 

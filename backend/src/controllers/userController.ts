@@ -35,7 +35,7 @@ export const createUser = async (req: Request, res: Response) => {
         `https://api.github.com/users/${username}/repos`
       );
       const repos = reposResponse.data;
-
+      console.log(repos,'repos in getRepository')
       user.repos = repos; 
     } else {
       return res.status(404).json({ error: "User not found" });
