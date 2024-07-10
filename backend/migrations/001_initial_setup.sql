@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
   username VARCHAR(255) UNIQUE NOT NULL,
   name VARCHAR(255),
   location VARCHAR(255),
+  profile VARCHAR(255),
   bio TEXT,
   blog VARCHAR(255),
   public_repos INT,

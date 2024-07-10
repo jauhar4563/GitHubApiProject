@@ -12,8 +12,8 @@ export const getUserByUsername = async (
 
 export const createUser = async (userData: User): Promise<void> => {
   await pool.query(
-    `INSERT INTO users (username, name, location, bio, blog, public_repos, public_gists, followers, following, created_at, updated_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+    `INSERT INTO users (username, name, location, profile, bio, blog, public_repos, public_gists, followers, following, created_at, updated_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
     [
       userData.username,
       userData.name,
@@ -25,11 +25,12 @@ export const createUser = async (userData: User): Promise<void> => {
       userData.public_gists,
       userData.followers,
       userData.following,
-      userData.created_at,
-      userData.updated_at,
+      userData.created_at.toUTCString(), 
+      userData.updated_at.toUTCString(), 
     ]
   );
 };
+
 
 export const searchUsers = async (
   username: string | undefined,

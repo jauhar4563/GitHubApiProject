@@ -36,14 +36,69 @@ export const createUser = async (req: Request, res: Response) => {
       const repos = reposResponse.data;
 
       user.repos = repos; 
-
-      res.json(user);
     } else {
-      res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(user);
+
+  } catch (error: any) {
+    console.log(error)
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+export const getFollowersAndFriends = async (req: Request, res: Response) => {
+  const { username } = req.params;
+  console.log(username)
+  try {
+    const user = await userRepository.getUserByUsername(username);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    res.json(user);
+    const followersResponse = await axios.get(`https://api.github.com/users/${username}/followers`);
+    const followingResponse = await axios.get(`https://api.github.com/users/${username}/following`);
+
+    const followers = followersResponse.data.map((f: any) => f.login);
+    const following = followingResponse.data.map((f: any) => f.login);
+
+    const mutualFollowers = followers.filter((f: any) => following.includes(f));
+    const friends = await userRepository.searchUsers(mutualFollowers, undefined);
+
+    const followerDetails = await Promise.all(
+      followers.map(async (followerUsername: string) => {
+        const follower = await userRepository.getUserByUsername(followerUsername);
+        if (follower) {
+          return follower;
+        }
+        const response = await axios.get(`https://api.github.com/users/${followerUsername}`);
+        const followerData = {
+          id: 0,
+          username: response.data.login,
+          name: response.data.name,
+          location: response.data.location,
+          profile: response.data.avatar_url,
+          bio: response.data.bio,
+          blog: response.data.blog,
+          public_repos: response.data.public_repos,
+          public_gists: response.data.public_gists,
+          followers: response.data.followers,
+          following: response.data.following,
+          created_at: new Date(response.data.created_at),
+          updated_at: new Date(response.data.updated_at),
+        };
+        await userRepository.createUser(followerData);
+        return followerData;
+      })
+    );
+
+    res.json({
+      followers: followerDetails,
+      friends,
+    });
   } catch (error: any) {
+    console.log(error.message);
     res.status(500).json({ error: error.message });
   }
 };

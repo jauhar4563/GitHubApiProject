@@ -25,9 +25,10 @@ export const addFriends = async (req: Request, res: Response) => {
     for (const friend of friends) {
       await friendshipRepository.createFriendship(user.id, friend.id);
     }
-
+    console.log(friends,'in getFreinds')
     res.json(friends);
   } catch (error:any) {
+    console.log(error.message)
     res.status(500).json({ error: error.message });
   }
 };
