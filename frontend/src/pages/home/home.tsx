@@ -47,7 +47,7 @@ function Home() {
     <div className="home-div">
       <div className='Main-heading'>
         <Github size={32} color='white' fill='black'/>
-        <h1>Enter Github</h1>
+        <h1>Github Users</h1>
       </div>
       <div className="input-div">
         <input
@@ -74,7 +74,6 @@ function Home() {
         ))}
       </div>
 
-      {/* Confirmation Modal */}
       {showModal && (
         <div className="modal">
           <div className="modal-content">
