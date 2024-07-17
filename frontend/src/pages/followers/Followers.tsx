@@ -28,11 +28,29 @@ const Followers: React.FC = () => {
         <div className="current-user-details">
             <img className="user-profile" src={user.profile} alt="" />
             <div>
-                <h3>{user?.name.length!==0?user.name:user.username}'s Friends</h3>
+                <h3>{(!user.name)?user.username:user.name}'s Friends</h3>
                 <p>{user.bio}</p>
             </div>
         </div>
       <ul className="followers-list">
+
+      {(!Array.isArray(user?.followers)) && (
+          <div className="loader-container">
+            <div className="loader "></div>
+          </div>
+        )
+
+        }
+
+        {user?.follower?.length===0 && (
+          <div className="loader-container">
+              User Has no Followers
+          </div>
+        )
+
+        }
+        
+
         {Array.isArray(user.followers) && user.followers.map((follower: any) => (
           <li key={follower.id} className="follower-item">
             <Link to={`/${follower.username}/repos`} className="follower-link">
@@ -48,13 +66,7 @@ const Followers: React.FC = () => {
             </Link>
           </li>
         ))}
-        {(!Array.isArray(user.followers) || user.followers.length ===0) && (
-          <div className="loader-container">
-            <div className="loader "></div>
-          </div>
-        )
-
-        }
+       
       </ul>
     </div>
   );

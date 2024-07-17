@@ -28,7 +28,7 @@ const Repositories: React.FC = () => {
   };
 
   if (userStatus === 'loading') {
-    return <div className="loader "></div>;
+    return <div className="loader-container"><div className="loader "></div></div>;
   }
 
   if (!user) {
