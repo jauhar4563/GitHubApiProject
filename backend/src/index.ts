@@ -24,8 +24,8 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/users', userRoutes);
-app.use('/friends', friendRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/friends', friendRoutes);
 
 const port = process.env.PORT || 5000;
 

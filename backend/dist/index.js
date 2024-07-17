@@ -22,8 +22,8 @@ app.use((0, cors_1.default)({
 }));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use('/users', userRoutes_1.default);
-app.use('/friends', friendRoutes_1.default);
+app.use('/api/users', userRoutes_1.default);
+app.use('/api/friends', friendRoutes_1.default);
 const port = process.env.PORT || 5000;
 db_1.default
     .connect()
