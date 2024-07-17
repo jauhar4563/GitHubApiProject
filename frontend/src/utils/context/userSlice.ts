@@ -35,7 +35,7 @@ const initialState: UserState = {
 export const fetchUser = createAsyncThunk<User, string>(
   'user/fetchUser',
   async (username: string) => {
-    const response = await axios.post(`${host}/api/users`, { username });
+    const response = await axios.post(`${host}/users`, { username });
     return response.data;
   }
 );
@@ -43,7 +43,7 @@ export const fetchUser = createAsyncThunk<User, string>(
 export const fetchFollowers = createAsyncThunk(
   "user/fetchFollowers",
   async (username: string) => {
-    const response = await axios.get(`${host}/api/users/${username}/followers`);
+    const response = await axios.get(`${host}/users/${username}/followers`);
     console.log(response)
     return { username, followers: response.data.followers, friends: response.data.friends };
   }
@@ -52,7 +52,7 @@ export const fetchFollowers = createAsyncThunk(
 export const deleteUser = createAsyncThunk<void, string>(
   'user/deleteUser',
   async (username: string) => {
-    await axios.delete(`${host}/api/users/${username}`);
+    await axios.delete(`${host}/users/${username}`);
     return username;
   }
 );
